@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Formulário de Inscrição</title>
+    <link rel="stylesheet" href="/atividades_lucas/atividade2dia_1/styles.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            
+        }
+        button{
+    color: white;
+    background-color: rgb(57, 189, 237);
+}
+        input,
+        select,
+        textarea,
+        button {
+            
+            display: block;
+            margin: 10px 0;
+            padding: 8px;
+            width: 300px;
+        }
+
+        #resumo {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 320px;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Formulário de Inscrição</h2>
+    <form id="formInscricao">
+        <label>Nome Completo:
+            <input type="text" id="nome" required>
+        </label>
+
+        <label>E-mail:
+            <input type="email" id="email" required>
+        </label>
+
+        <label>Idade:
+            <input type="number" id="idade" required>
+        </label>
+
+        <label>Área de Interesse:
+            <select id="interesse" required>
+                <option value="">Selecione</option>
+                <option value="Inteligência Artificial">Inteligência Artificial</option>
+                <option value="Desenvolvimento Web">Desenvolvimento Web</option>
+                <option value="Segurança da Informação">Segurança da Informação</option>
+                <option value="Startups e Inovação">Startups e Inovação</option>
+            </select>
+        </label>
+
+        <label>Mensagem ou dúvida:
+            <textarea id="mensagem"></textarea>
+        </label>
+
+        <button type="submit">Enviar Inscrição</button>
+    </form>
+
+    <div id="resumo" style="display:none;"></div>
+
+    <script>
+        const form = document.getElementById("formInscricao");
+        const resumoDiv = document.getElementById("resumo");
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const nome = document.getElementById("nome").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const idade = document.getElementById("idade").value.trim();
+            const interesse = document.getElementById("interesse").value;
+            const mensagem = document.getElementById("mensagem").value.trim();
+
+            if (!nome || !email || !idade || !interesse) {
+                alert("Por favor, preencha todos os campos obrigatórios.");
+                return;
+            }
+
+            resumoDiv.innerHTML = `
+        <h3>Confirme seus dados:</h3>
+        <p><strong>Nome:</strong> ${nome}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Idade:</strong> ${idade}</p>
+        <p><strong>Área de Interesse:</strong> ${interesse}</p>
+        <p><strong>Mensagem:</strong> ${mensagem || "Nenhuma"}</p>
+        <button id="confirmarBtn">Confirmar Envio</button> `;
+            resumoDiv.style.display = "block";
+
+            document.getElementById("confirmarBtn").addEventListener("click", function () {
+                const dados = { nome, email, idade, interesse, mensagem };
+                localStorage.setItem("inscricao", JSON.stringify(dados));
+                alert("Inscrição enviada com sucesso!");
+                form.reset();
+                resumoDiv.style.display = "none";
+            }, { once: true });
+
+        });
+    </script>
+<p>Em caso de dúvidas, visite nosso <a href="https://www.youtube.com/"> FAQ</a></p>
+</body>
+
+</html>

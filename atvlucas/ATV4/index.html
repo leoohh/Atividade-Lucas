@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Portal de Cursos - Área de Tecnologia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #1a2d44;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-top: 10px;
+            width: 600px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ccc;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        input,
+        select,
+        textarea,
+        button {
+            display: block;
+            margin-top: 8px;
+            padding: 10px;
+            width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #1a2d44;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 150px;
+            margin-top: 15px;
+        }
+
+        .erro {
+            border: 2px solid red;
+        }
+
+        .mensagem,
+        .resumo,
+        .dadosSalvos {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #f0f8ff;
+            border: 1px solid #ccc;
+            width: 420px;
+            display: none;
+        }
+
+        a {
+            color: #2853ff;
+        }
+
+        small {
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Portal de Cursos - Área de Tecnologia</h1>
+    <p>Bem-vindo ao nosso portal de cursos livres para iniciantes em tecnologia!</p>
+
+    <h2>Cursos Disponíveis</h2>
+    <ul>
+        <li>Introdução ao HTML e CSS</li>
+        <p></p>
+        <li>Lógica de Programação com Python</li>
+        <p></p>
+        <li>Bancos de Dados com MySQL</li>
+    </ul>
+
+    <h2>Motivos para Estudar Conosco</h2>
+    <ol>
+        <li>Conteúdo atualizado com o mercado</li>
+        <p></p>
+        <li>Professores com experiência prática</li>
+        <p></p>
+        <li>Ambiente virtual simples e eficaz</li>
+    </ol>
+
+    <h2>Grade Horária</h2>
+    <table>
+        <tr>
+            <th>Curso</th>
+            <th>Dias</th>
+            <th>Horário</th>
+        </tr>
+        <tr>
+            <td>HTML e CSS</td>
+            <td>Segundas e Quartas</td>
+            <td>18h às 20h</td>
+        </tr>
+        <tr>
+            <td>JavaScript</td>
+            <td>Terças e Quintas</td>
+            <td>19h às 21h</td>
+        </tr>
+    </table>
+
+    <h2>Formulário de Inscrição</h2>
+
+    <form id="formInscricao">
+        <label>Nome completo:
+            <input type="text" id="nome" placeholder="Seu nome completo">
+        </label>
+        <p></p>
+
+        <label>E-mail:
+            <input type="email" id="email" placeholder="exemplo@email.com">
+        </label>
+
+        <p></p>
+
+        <label>Curso desejado:
+            <select id="curso">
+                <option value="">-- Selecione --</option>
+                <option value="HTML e CSS">HTML e CSS</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="Python">Lógica com Python</option>
+                <option value="MySQL">Banco de Dados</option>
+            </select>
+        </label>
+        <p></p>
+
+        <label>Mensagem adicional:
+            <textarea id="mensagem" rows="4" placeholder="Conte-nos por que deseja se inscrever..."></textarea>
+        </label>
+
+        <button type="submit">Enviar Inscrição</button>
+    </form>
+
+    <div class="resumo" id="resumo"></div>
+    <div class="mensagem" id="mensagemSucesso"></div>
+    <div class="dadosSalvos" id="dadosSalvos"></div>
+
+    <br>
+    <small>Saiba mais <a href="#">acessando nosso FAQ</a>.</small><br>
+    <a href="#">Voltar ao topo</a>
+
+    <script>
+        const form = document.getElementById("formInscricao");
+        const sucesso = document.getElementById("mensagemSucesso");
+        const resumoDiv = document.getElementById("resumo");
+        const dadosSalvosDiv = document.getElementById("dadosSalvos");
+
+        function mostrarDadosSalvos() {
+            const dados = localStorage.getItem("dadosInscricao");
+            if (dados) {
+                const obj = JSON.parse(dados);
+                dadosSalvosDiv.innerHTML = `
+            <h3>Última inscrição salva:</h3>
+            <p><strong>Nome:</strong> ${obj.nome}</p>
+            <p><strong>Email:</strong> ${obj.email}</p>
+            <p><strong>Curso:</strong> ${obj.curso}</p>
+            <p><strong>Mensagem:</strong> ${obj.mensagem || "Nenhuma"}</p>
+        `;
+                dadosSalvosDiv.style.display = "block";
+            }
+        }
+
+        mostrarDadosSalvos();
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            document.querySelectorAll("input, select").forEach(el => el.classList.remove("erro"));
+            resumoDiv.style.display = "none";
+            sucesso.style.display = "none";
+
+            const nome = document.getElementById("nome");
+            const email = document.getElementById("email");
+            const curso = document.getElementById("curso");
+            const mensagem = document.getElementById("mensagem");
+
+            let valido = true;
+
+            if (nome.value.trim() === "") {
+                nome.classList.add("erro");
+                valido = false;
+            }
+
+            if (email.value.trim() === "") {
+                email.classList.add("erro");
+                valido = false;
+            }
+
+            if (curso.value === "") {
+                curso.classList.add("erro");
+                valido = false;
+            }
+
+            if (!valido) {
+                alert("Por favor, preencha os campos obrigatórios.");
+                return;
+            }
+
+            // Exibir pré-visualização
+            resumoDiv.innerHTML = `
+        <h3>Confirme seus dados antes de enviar:</h3>
+        <p><strong>Nome:</strong> ${nome.value}</p>
+        <p><strong>Email:</strong> ${email.value}</p>
+        <p><strong>Curso:</strong> ${curso.value}</p>
+        <p><strong>Mensagem:</strong> ${mensagem.value || "Nenhuma"}</p>
+        <button id="confirmarBtn">Confirmar Envio</button>
+    `;
+            resumoDiv.style.display = "block";
+
+            document.getElementById("confirmarBtn").addEventListener("click", function () {
+                const dados = {
+                    nome: nome.value.trim(),
+                    email: email.value.trim(),
+                    curso: curso.value,
+                    mensagem: mensagem.value.trim()
+                };
+
+                localStorage.setItem("dadosInscricao", JSON.stringify(dados));
+
+                sucesso.innerText = `Inscrição confirmada! Obrigado, ${dados.nome}.`;
+                sucesso.style.display = "block";
+                resumoDiv.style.display = "none";
+                form.reset();
+                mostrarDadosSalvos();
+            }, { once: true });
+        });
+    </script>
+</body>
+
+</html>

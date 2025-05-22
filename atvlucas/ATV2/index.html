@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Exercício Dinâmico</title>
+  <style>
+    table { border-collapse: collapse; width: 100%; margin-bottom: 1rem; }
+    th, td { border: 1px solid #ccc; padding: 4px 8px; }
+    #skillsList li { margin: 4px 0; }
+    #skillsList button { margin-left: 8px; }
+    .error { color: red; font-size: 0.9em; }
+    #successMsg { color: green; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+
+  <h2>Perfil do Usuário</h2>
+  <table id="userInfoTable">
+    <thead>
+      <tr><th>Campo</th><th>Detalhe</th></tr>
+    </thead>
+    <tbody>
+      <!-- será preenchido por JS -->
+    </tbody>
+  </table>
+
+  <h3>Habilidades</h3>
+  <ul id="skillsList">
+    <!-- será preenchido por JS -->
+  </ul>
+  <input type="text" id="newSkill" placeholder="Nova habilidade…">
+  <button id="addSkillBtn">Adicionar</button>
+
+  <h2>Entre em Contato</h2>
+  <form id="contactForm" novalidate>
+    <div>
+      <label for="nome">Nome:</label><br>
+      <input type="text" id="nome" name="nome">
+      <div class="error" id="errNome"></div>
+    </div>
+    <div>
+      <label for="email">E-mail:</label><br>
+      <input type="email" id="email" name="email">
+      <div class="error" id="errEmail"></div>
+    </div>
+    <div>
+      <label for="mensagem">Mensagem:</label><br>
+      <textarea id="mensagem" name="mensagem" rows="4"></textarea>
+      <div class="error" id="errMsg"></div>
+    </div>
+    <button type="submit">Enviar</button>
+  </form>
+
+  <div id="successMsg"></div>
+
+  <script>
+    // 1) Dados dinâmicos da tabela
+    const user = {
+      Nome: 'João da Silva',
+      Idade: '30 anos',
+      Ocupação: 'Desenvolvedor Web'
+    };
+    function renderUserInfo() {
+      const tbody = document.querySelector('#userInfoTable tbody');
+      tbody.innerHTML = '';
+      for (let campo in user) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${campo}</td><td>${user[campo]}</td>`;
+        tbody.appendChild(tr);
+      }
+    }
+    renderUserInfo();
+
+    // 2) Add/remover habilidades
+    const skills = ['HTML & CSS','JavaScript','Python','React'];
+    const skillsList = document.getElementById('skillsList');
+    function renderSkills() {
+      skillsList.innerHTML = '';
+      skills.forEach((s,i) => {
+        const li = document.createElement('li');
+        li.textContent = s;
+        const btn = document.createElement('button');
+        btn.textContent = '❌';
+        btn.addEventListener('click', () => {
+          skills.splice(i,1);
+          renderSkills();
+        });
+        li.appendChild(btn);
+        skillsList.appendChild(li);
+      });
+    }
+    renderSkills();
+    document.getElementById('addSkillBtn').onclick = () => {
+      const v = document.getElementById('newSkill').value.trim();
+      if (v) {
+        skills.push(v);
+        renderSkills();
+        document.getElementById('newSkill').value = '';
+      }
+    };
+
+    // 3) Validação e simulação de envio do formulário
+    const form = document.getElementById('contactForm');
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      let valid = true;
+      // limpa erros
+      ['Nome','Email','Msg'].forEach(id => document.getElementById('err'+id).textContent = '');
+      document.getElementById('successMsg').textContent = '';
+
+      // checa campo a campo
+      if (!this.nome.value.trim()) {
+        document.getElementById('errNome').textContent = 'Preencha seu nome.';
+        valid = false;
+      }
+      if (!this.email.value.trim()) {
+        document.getElementById('errEmail').textContent = 'Preencha seu e-mail.';
+        valid = false;
+      }
+      if (!this.mensagem.value.trim()) {
+        document.getElementById('errMsg').textContent = 'Deixe uma mensagem.';
+        valid = false;
+      }
+      if (!valid) return;
+
+      // simula envio
+      document.getElementById('successMsg').textContent = 
+        'Formulário enviado com sucesso!';
+      form.reset();
+    });
+  </script>
+</body>
+</html>

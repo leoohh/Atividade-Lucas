@@ -1,0 +1,34 @@
+table.planilha {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.planilha th,
+table.planilha td {
+    border: 1px solid #999;
+    padding: 6px;
+    min-width: 80px;
+    text-align: left;
+}
+
+.planilha {
+    border-collapse: collapse;
+    border: 1px solid #666;
+    display: inline-table;
+    /* aqui */
+}
+
+.planilha th,
+.planilha td {
+    border: 1px solid #999;
+    padding: 4px;
+}
+
+table.planilha td[contenteditable="true"] {
+    background: #f9f9f9;
+    cursor: text;
+}
+
+table.planilha th {
+    background: #eee;
+}
